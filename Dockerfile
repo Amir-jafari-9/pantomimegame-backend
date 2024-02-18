@@ -28,10 +28,10 @@ WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 
 # Copy the built app from the builder stage
-COPY --from=builder /app/dist ./dist
+#COPY --from=builder /app/dist ./dist
 
 # Expose the port 8000
-EXPOSE 8000
+EXPOSE 3000
 
 # Start the app
 CMD ["node", "dist/index.js"]
