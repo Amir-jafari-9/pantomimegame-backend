@@ -1,0 +1,17 @@
+# Specify the Compose file version
+version: '3'
+
+# Define the services
+services:
+# The Node.js app service
+app:
+# Build the image from the Dockerfile
+build: .
+# Name the image as node-game
+image: node-game
+# Map the port 8000 of the container to the port 8000 of the host
+ports:
+•  "8000:8000"
+
+# Restart the container automatically if it fails
+restart: always
