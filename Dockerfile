@@ -16,7 +16,7 @@ RUN npm install
 COPY . .
 
 # Build the Node.js app
-RUN npm run build
+#RUN npm run build
 
 # Second stage: run the app
 FROM node:14-alpine
