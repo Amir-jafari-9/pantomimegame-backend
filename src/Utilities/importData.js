@@ -1,5 +1,5 @@
 const fs = require("fs");
-const CategoryModel = require("../model/word");
+const CategoryModel = require("../models/word");
 const mongoose = require("mongoose");
 const path = require("path");
 

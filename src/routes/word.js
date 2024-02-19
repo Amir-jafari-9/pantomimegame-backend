@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
-const { getWord } = require("../controller/word");
+const { getWord, test } = require("../controllers/word");
 
 router.route("/words/word").get(
     body("category")
@@ -28,6 +28,6 @@ router.route("/words/word").get(
 
     getWord
 );
-// router.route("/test").get(test);
+router.route("/test").get(test);
 
 module.exports = router;

@@ -17,14 +17,9 @@ const CategorySchema = new mongoose.Schema({
         enum: ["TA", "TO", "TJ", "TC", "TAC", "TE"],
         required: [true, "please provide a category name"]
     },
-    words: [WordSchema]
+    words: [WordSchema],
+    repeated: [mongoose.Schema.Types.ObjectId]
 });
-// "حیوانات"
-// "اشیاء"
-// "شغل"
-// "شخصیت ها"
-// "تفریحات"
-// "موقعیت ها"
 
 const CategoryModel = mongoose.model("Category", CategorySchema);
 
