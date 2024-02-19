@@ -13,7 +13,7 @@ const test = (req, res) => {
     });
 };
 
-const getWord = async (req, res) => {
+const fetchRandomWord = async (req, res) => {
     // handle any error in validated body
     const resultValidator = validationResult(req);
 
@@ -66,4 +66,4 @@ const getWord = async (req, res) => {
     });
 };
 
-module.exports = { getWord, test };
+module.exports = { fetchRandomWord, test };

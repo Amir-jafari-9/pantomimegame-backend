@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
-const { getWord, test } = require("../controllers/word");
+const { fetchRandomWord, test } = require("../controllers/word");
 
 router.route("/words/word").get(
     body("category")
@@ -26,7 +26,7 @@ router.route("/words/word").get(
             "please select one of this format ['1','2','3'] for level "
         ),
 
-    getWord
+    fetchRandomWord
 );
 router.route("/test").get(test);
 
