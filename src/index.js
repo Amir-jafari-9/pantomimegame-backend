@@ -3,21 +3,20 @@ require("express-async-errors");
 // extra security packages
 const helmet = require("helmet");
 const cors = require("cors");
-
 const rateLimiter = require("express-rate-limit");
 
+const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 
-const mongoCon = require("./connection/mongoCon");
-const { importData } = require("./common/importData");
+const { importData } = require("./Utilities/importData");
 
 // routers
 const wordRoute = require("./routes/word");
 
 // error handler
-const notFound = require("./middleware/not-found");
-const errorHandlerMiddleware = require("./middleware/error_handler");
+const notFound = require("./middlewares/not-found");
+const errorHandlerMiddleware = require("./middlewares/error_handler");
 
 const port = process.env.PORT || 3000;
 
@@ -51,7 +50,7 @@ app.use(notFound);
 
 const start = async () => {
     try {
-        await mongoCon(
+        await mongoose.connect(
             process.env.MONGO_URI,
             console.log("database connected ...")
         );
