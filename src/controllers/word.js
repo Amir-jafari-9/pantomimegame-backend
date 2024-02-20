@@ -13,15 +13,14 @@ const test = (req, res) => {
     });
 };
 
-const getWord = async (req, res) => {
+const fetchRandomWord = async (req, res) => {
     // handle any error in validated body
     const resultValidator = validationResult(req);
 
     if (resultValidator.errors.length > 0)
         throw new CustomAPIError(resultValidator.errors[0].msg, 422);
 
-    // Aggregating data from the CategoryModel collection and match title with category where we get from body . deconstruct the words array into separate documents filter levels of words array to level we get from body random select one documents from array of words
-    const { category, level } = req.body;
+    const { category, level } = req.query;
     const [categoryData] = await CategoryModel.aggregate([
         {
             $match: {
@@ -43,7 +42,8 @@ const getWord = async (req, res) => {
                     }
                 }
             }
-        }
+        },
+        { $sample: { size: 1 } }
     ]);
 
     // add random word to Repeated in database
@@ -66,4 +66,4 @@ const getWord = async (req, res) => {
     });
 };
 
-module.exports = { getWord, test };
+module.exports = { fetchRandomWord, test };
