@@ -1,7 +1,7 @@
 const { clearRepeated } = require("../Utilities/clearRepeated");
 const CustomAPIError = require("../errors/custom-error");
 const CategoryModel = require("../models/word");
-const { validationResult } = require("express-validator");
+const fetchWordSchema = require("../validators/fetchWord");
 
 const test = (req, res) => {
     res.status(200).json({
@@ -14,13 +14,15 @@ const test = (req, res) => {
 };
 
 const fetchRandomWord = async (req, res) => {
-    // handle any error in validated body
-    const resultValidator = validationResult(req);
+    // check result of validate
+    const {
+        value: { category, level },
+        error
+    } = fetchWordSchema.validate(req.query);
+    if (error)
+        throw new CustomAPIError(error.toString().replace("Error: ", ""), 422);
 
-    if (resultValidator.errors.length > 0)
-        throw new CustomAPIError(resultValidator.errors[0].msg, 422);
-
-    const { category, level } = req.query;
+    // get random data from database
     const [categoryData] = await CategoryModel.aggregate([
         {
             $match: {
