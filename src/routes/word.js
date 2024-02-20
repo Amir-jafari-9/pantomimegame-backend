@@ -1,12 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { body } = require("express-validator");
+const { body, query } = require("express-validator");
 const { getWord, test } = require("../controllers/word");
 
 router.route("/words/word").get(
-    body("category")
-        .isString()
-        .withMessage("category should be string")
+    query("category")
         .notEmpty()
         .withMessage("category can not be empty")
         .trim()
@@ -15,9 +13,7 @@ router.route("/words/word").get(
         .withMessage(
             "please select one of this format ['TA', 'TO', 'TJ', 'TC', 'TAC', 'TE'] for level "
         ),
-    body("level")
-        .isString()
-        .withMessage("level should be a string value")
+    query("level")
         .notEmpty()
         .withMessage("level can not be empty")
         .trim()
