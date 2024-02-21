@@ -7,18 +7,40 @@ const WordSchema = new mongoose.Schema({
     },
     level: {
         type: String,
-        enum: ["1", "2", "3"],
-        required: [true, "please select one of this format ['1','2','3' "]
+        enum: ["1", "2", "3", "4"],
+        required: [true, "please provide a level "]
     }
 });
 const CategorySchema = new mongoose.Schema({
     title: {
         type: String,
-        enum: ["TA", "TO", "TJ", "TC", "TAC", "TE"],
+        enum: [
+            "TJ",
+            "TS",
+            "TCH",
+            "TE",
+            "TB",
+            "TA",
+            "TO",
+            "TF",
+            "TM",
+            "TT",
+            "TAC",
+            "TTE",
+            "TK",
+            "TZ",
+            "TET",
+            "TCC",
+            "TG"
+        ],
         required: [true, "please provide a category name"]
     },
-    words: [WordSchema],
-    repeated: [mongoose.Schema.Types.ObjectId]
+    words: [WordSchema]
+});
+CategorySchema.virtual("players", {
+    ref: "Player",
+    localField: "_id",
+    foreignField: "category"
 });
 
 const CategoryModel = mongoose.model("Category", CategorySchema);
