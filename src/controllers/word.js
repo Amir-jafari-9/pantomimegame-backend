@@ -1,9 +1,10 @@
 const { clearRepeated } = require("../Utilities/clearRepeated");
 const CustomAPIError = require("../errors/custom-error");
+const Player = require("../models/game");
 const CategoryModel = require("../models/word");
 const fetchWordSchema = require("../validators/fetchWord");
 
-const test = (req, res) => {
+const test = async (req, res) => {
     res.status(200).json({
         data: {
             category: "example",
@@ -12,15 +13,23 @@ const test = (req, res) => {
         }
     });
 };
+const createPlayer = async (req, res) => {
+    const player = await Player.create({ name: req.body.player });
+    res.status(201).json({ player: player.name });
+};
 
 const fetchRandomWord = async (req, res) => {
     // check result of validate
-    const {
-        value: { category, level },
+
+    let {
+        value: { category, level, player },
         error
     } = fetchWordSchema.validate(req.query);
     if (error)
         throw new CustomAPIError(error.toString().replace("Error: ", ""), 422);
+
+    // for golden question
+    if (category === "TG") level = "4";
 
     // get random data from database
     const [categoryData] = await CategoryModel.aggregate([
@@ -30,42 +39,65 @@ const fetchRandomWord = async (req, res) => {
             }
         },
         {
+            $lookup: {
+                from: "players",
+                localField: "players",
+                foreignField: "category",
+                as: "players"
+            }
+        },
+        {
+            $unwind: {
+                path: "$players"
+            }
+        },
+        {
+            $match: { "players.name": { $eq: player } }
+        },
+        {
             $unwind: {
                 path: "$words"
             }
         },
         { $match: { "words.level": { $eq: level } } },
-
         {
             $match: {
                 $expr: {
                     $not: {
-                        $in: ["$words._id", "$repeated"]
+                        $in: ["$words._id", "$players.repeatedWords"]
                     }
                 }
             }
         },
         { $sample: { size: 1 } }
     ]);
+    if (!categoryData) {
+        throw new CustomAPIError("No data found", 404);
+    }
+
+    // {------------------------add selected word to db---------------------------------}
+
+    const wordData = categoryData.words;
 
     // add random word to Repeated in database
-    const newCategoryData = await CategoryModel.findByIdAndUpdate(
-        categoryData._id,
+    const playerData = await Player.findOneAndUpdate(
+        { name: player, "repeatedWords.title": category },
         {
-            $push: { repeated: categoryData.words._id }
-        }
+            $push: { "repeatedWords.$.words": wordData._id }
+        },
+        { new: true }
     );
 
     // helper function to clear Repeated if all word use
-    clearRepeated(newCategoryData, level);
+    clearRepeated(playerData, level, category);
 
     res.status(200).json({
         data: {
             category: categoryData.title,
-            level: categoryData.words.level,
-            word: categoryData.words.word
+            level: wordData.level,
+            word: wordData.word
         }
     });
 };
 
-module.exports = { fetchRandomWord, test };
+module.exports = { fetchRandomWord, createPlayer, test };
