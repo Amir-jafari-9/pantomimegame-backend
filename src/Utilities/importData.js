@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 
 const wordsData = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "words.json"), "utf-8")
+    fs.readFileSync(path.join(__dirname, "newWords.json"), "utf-8")
 );
 
 // import data to MongoDB
