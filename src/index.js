@@ -23,21 +23,6 @@ const port = process.env.PORT || 3000;
 // handel req.body
 app.use(express.json());
 
-app.use(
-    rateLimiter({
-        windowMs: 15 * 60 * 1000, // 15 minutes
-        max: 100, // limit each IP to 100 requests per windowMs
-        handler: function (req, res /*, next*/) {
-            res.status(429).json({
-                status: 429,
-                success: false,
-                message:
-                    "Too many requests from this IP, please try again later.",
-                data: null
-            });
-        }
-    })
-);
 app.use(cors());
 app.use(helmet());
 
@@ -47,7 +32,7 @@ app.use("/api/v1", wordRoute);
 app.get("/api/v1/version", (req, res) => {
     res.status(200).json({
         success: true,
-        version: process.env.APP_VERSION || 'version not set',
+        version: process.env.APP_VERSION || "version not set"
     });
 });
 
