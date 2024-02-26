@@ -44,6 +44,13 @@ app.use(helmet());
 // Routes
 app.use("/api/v1", wordRoute);
 
+app.get("/api/v1/version", (req, res) => {
+    res.status(200).json({
+        success: true,
+        version: process.env.APP_VERSION || 'version not set',
+    });
+});
+
 // middleware
 app.use(errorHandlerMiddleware);
 app.use(notFound);
