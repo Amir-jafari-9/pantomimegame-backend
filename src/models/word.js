@@ -37,8 +37,8 @@ const CategorySchema = new mongoose.Schema({
     },
     words: [WordSchema]
 });
-CategorySchema.virtual("players", {
-    ref: "Player",
+CategorySchema.virtual("Game", {
+    ref: "Game",
     localField: "_id",
     foreignField: "category"
 });

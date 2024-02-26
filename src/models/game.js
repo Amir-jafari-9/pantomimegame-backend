@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const playerSchema = new mongoose.Schema({
+const GameSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, "you should provide a name"],
@@ -33,8 +33,7 @@ const playerSchema = new mongoose.Schema({
         ref: "Category"
     }
 });
-// "TJ","TS","TCH","TE","TB","TA","TO","TF","TM","TT","TAC","TTE","TK","TZ","TET","TCC","TG"
 
-const Player = mongoose.model("Player", playerSchema);
+const Game = mongoose.model("Game", GameSchema);
 
-module.exports = Player;
+module.exports = Game;

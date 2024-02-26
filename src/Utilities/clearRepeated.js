@@ -6,8 +6,9 @@ const clearRepeated = async (player, level, title) => {
         (word) => word.level === level
     );
     const [playerCategory] = player.repeatedWords.filter(
-        (repeated) => repeated.title === "TO"
+        (repeated) => repeated.title === title
     );
+
     if (filterDataByLevel.length <= playerCategory.words.length) {
         await Player.updateOne(
             { name: player.name, "repeatedWords.title": title },

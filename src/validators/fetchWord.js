@@ -40,18 +40,18 @@ const fetchWordSchema = Joi.object({
         .required()
         .error(new Error("please provide a category"))
         .trim()
-        .valid("1", "2", "3", "4")
+        .valid("1", "2", "3")
         .error(
             new Error(
-                "please select one of this format ['1','2','3','4'] for level "
+                "please select one of this format ['1','2','3'] for level "
             )
         ),
-    player: Joi.string()
-        .error(new Error("level should be an string"))
+    game: Joi.string()
+        .error(new Error("game should be an string"))
         .empty()
-        .error(new Error("level can not be empty"))
+        .error(new Error("game can not be empty"))
         .required()
-        .error(new Error("please provide a category"))
+        .error(new Error("please provide a game"))
         .trim()
 });
 
