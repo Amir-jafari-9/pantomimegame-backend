@@ -4,7 +4,7 @@ const clearRepeated = async (category, level) => {
         (word) => word.level === level
     );
 
-    if (filterDataByLevel.length === category.repeated.length + 1)
+    if (filterDataByLevel.length <= category.repeated.length + 1)
         await CategoryModel.findByIdAndUpdate(category._id, {
             repeated: []
         });
