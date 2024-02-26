@@ -2,6 +2,7 @@ const { clearRepeated } = require("../Utilities/clearRepeated");
 const CustomAPIError = require("../errors/custom-error");
 const CategoryModel = require("../models/word");
 const fetchWordSchema = require("../validators/fetchWord");
+const categoryName = require("../helpers/categoryName");
 
 const test = (req, res) => {
     res.status(200).json({
@@ -64,6 +65,7 @@ const fetchRandomWord = async (req, res) => {
 
     res.status(200).json({
         data: {
+            name: categoryName[categoryData.title],
             category: categoryData.title,
             level: categoryData.words.level,
             word: categoryData.words.word
