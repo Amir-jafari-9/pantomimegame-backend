@@ -8,7 +8,11 @@ const WordSchema = new mongoose.Schema({
     level: {
         type: String,
         enum: ["1", "2", "3", "4"],
+<<<<<<< HEAD
         required: [true, "please provide a level "]
+=======
+        required: [true, "please select one of this format ['1','2','3' "]
+>>>>>>> main
     }
 });
 const CategorySchema = new mongoose.Schema({

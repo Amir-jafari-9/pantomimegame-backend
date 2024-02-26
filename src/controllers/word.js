@@ -5,11 +5,22 @@ const Game = require("../models/game");
 const Player = require("../models/game");
 const CategoryModel = require("../models/word");
 const fetchWordSchema = require("../validators/fetchWord");
+const categoryName = require("../helpers/categoryName");
+
+const test = (req, res) => {
+    res.status(200).json({
+        data: {
+            category: "example",
+            level: "2",
+            word: "گرگ"
+        }
+    });
+};
 
 const fetchRandomWord = async (req, res) => {
     // check result of validate
     let {
-        value: { category, level, game },
+        value: { category, level },
         error
     } = fetchWordSchema.validate(req.query);
     if (error)
@@ -42,6 +53,7 @@ const fetchRandomWord = async (req, res) => {
 
     res.status(200).json({
         data: {
+            name: categoryName[categoryData.title],
             category: categoryData.title,
             level: wordData.level,
             word: wordData.word

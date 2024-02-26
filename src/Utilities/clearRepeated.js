@@ -9,6 +9,7 @@ const clearRepeated = async (player, level, title) => {
         (repeated) => repeated.title === title
     );
 
+<<<<<<< HEAD
     if (filterDataByLevel.length <= playerCategory.words.length) {
         await Player.updateOne(
             { name: player.name, "repeatedWords.title": title },
@@ -17,6 +18,12 @@ const clearRepeated = async (player, level, title) => {
             }
         );
     }
+=======
+    if (filterDataByLevel.length <= category.repeated.length + 1)
+        await CategoryModel.findByIdAndUpdate(category._id, {
+            repeated: []
+        });
+>>>>>>> main
 };
 
 module.exports = { clearRepeated };
