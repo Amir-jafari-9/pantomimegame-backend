@@ -15,12 +15,15 @@ const test = (req, res) => {
 
 const fetchRandomWord = async (req, res) => {
     // check result of validate
-    const {
+    let {
         value: { category, level },
         error
     } = fetchWordSchema.validate(req.query);
     if (error)
         throw new CustomAPIError(error.toString().replace("Error: ", ""), 422);
+
+    // for golden question
+    if (category === "TG") level = "4";
 
     // get random data from database
     const [categoryData] = await CategoryModel.aggregate([

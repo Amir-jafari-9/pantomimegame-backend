@@ -9,10 +9,28 @@ const fetchWordSchema = Joi.object({
         .error(new Error("please provide a category"))
         .trim()
         .uppercase()
-        .valid("TA", "TO", "TJ", "TC", "TAC", "TE")
+        .valid(
+            "TJ",
+            "TS",
+            "TCH",
+            "TE",
+            "TB",
+            "TA",
+            "TO",
+            "TF",
+            "TM",
+            "TT",
+            "TAC",
+            "TTE",
+            "TK",
+            "TZ",
+            "TET",
+            "TCC",
+            "TG"
+        )
         .error(
             new Error(
-                "please select one of this format ['TA', 'TO', 'TJ', 'TC', 'TAC', 'TE'] for level "
+                "please select one of this format ['TJ'  , 'TS'  , 'TCH'  ,'TE'  , 'TB' , 'TA'  ,'TO'  ,'TF' ,'TM'  ,'TT' ,'TAC'  ,'TTE' ,'TK' ,'TZ'  ,'TET' ,'TCC','TG'] for level "
             )
         ),
     level: Joi.string()
