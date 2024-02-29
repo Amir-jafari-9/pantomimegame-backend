@@ -3,6 +3,7 @@ const CustomAPIError = require("../errors/custom-error");
 const CategoryModel = require("../models/word");
 const fetchWordSchema = require("../validators/fetchWord");
 const categoryName = require("../helpers/categoryName");
+const scoreList = require("../helpers/scorelist");
 
 const test = (req, res) => {
     res.status(200).json({
@@ -24,6 +25,11 @@ const fetchRandomWord = async (req, res) => {
         throw new CustomAPIError(error.toString().replace("Error: ", ""), 422);
 
     // for golden question
+    if (category !== "TG" && level !== "1" && level !== "2" && level !== "3")
+        throw new CustomAPIError(
+            "for none 'TG' category please select between 1 , 2, 3",
+            404
+        );
     if (category === "TG") level = "4";
 
     // get random data from database
@@ -68,7 +74,8 @@ const fetchRandomWord = async (req, res) => {
             name: categoryName[categoryData.title],
             category: categoryData.title,
             level: categoryData.words.level,
-            word: categoryData.words.word
+            word: categoryData.words.word,
+            score: scoreList[categoryData.words.level]
         }
     });
 };
