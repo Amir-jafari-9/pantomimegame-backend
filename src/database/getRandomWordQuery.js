@@ -2,14 +2,14 @@ module.exports = getRandomWordQuery = (category, game, level) => {
     return [
         {
             $match: {
-                title: category
+                category: category
             }
         },
         {
             $lookup: {
                 from: "games",
                 localField: "games",
-                foreignField: "category",
+                foreignField: "words",
                 as: "games"
             }
         },
@@ -19,31 +19,16 @@ module.exports = getRandomWordQuery = (category, game, level) => {
             }
         },
         {
-            $unwind: {
-                path: "$games.repeatedWords"
-            }
-        },
-        {
             $match: {
-                "games.name": { $eq: game }
+                "games.title": { $eq: game }
             }
         },
-        {
-            $match: {
-                "games.repeatedWords.title": category
-            }
-        },
-        {
-            $unwind: {
-                path: "$words"
-            }
-        },
-        { $match: { "words.level": { $eq: level } } },
+        { $match: { level: { $eq: level } } },
         {
             $match: {
                 $expr: {
                     $not: {
-                        $in: ["$words._id", "$games.repeatedWords.words"]
+                        $in: ["$_id", "$games.repeatedWords"]
                     }
                 }
             }

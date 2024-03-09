@@ -1,39 +1,107 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const GameSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: [true, "you should provide a name"],
-        unique: [true, "this name is already in use"]
+const groupSchema = new mongoose.Schema(
+    {
+        title: {
+            type: String,
+            index: { unique: true }
+        },
+        players: [Schema.Types.ObjectId],
+        score: {
+            type: Number,
+            default: 0
+        }
     },
-    repeatedWords: {
-        type: [{ title: String, words: [mongoose.Schema.Types.ObjectId] }],
-        default: [
-            { title: "TJ", words: [] },
-            { title: "TS", words: [] },
-            { title: "TCH", words: [] },
-            { title: "TE", words: [] },
-            { title: "TB", words: [] },
-            { title: "TA", words: [] },
-            { title: "TO", words: [] },
-            { title: "TF", words: [] },
-            { title: "TM", words: [] },
-            { title: "TT", words: [] },
-            { title: "TAC", words: [] },
-            { title: "TTE", words: [] },
-            { title: "TK", words: [] },
-            { title: "TZ", words: [] },
-            { title: "TET", words: [] },
-            { title: "TCC", words: [] },
-            { title: "TG", words: [] }
-        ]
-    },
-    category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Category"
-    }
+
+    { timestamps: true }
+);
+const stepSettingSchema = new mongoose.Schema({
+    category: String,
+    level: String
+});
+const actionSchema = new mongoose.Schema({
+    cheat: Number,
+    change: Number
 });
 
-const Game = mongoose.model("Game", GameSchema);
+const stepDetail = new mongoose.Schema(
+    {
+        stepSetting: stepSettingSchema,
+        group: Schema.Types.ObjectId,
+        player: Schema.Types.ObjectId,
+        words: [{ wordId: Schema.Types.ObjectId, title: String }],
+        playedWord: Schema.Types.ObjectId,
+        action: actionSchema,
+        stepScore: Number,
+        restTimeScore: Number
+    },
+    { timestamps: true }
+);
+const roundSchema = new mongoose.Schema(
+    {
+        status: {
+            type: String,
+            enum: ["running", "starting", "finished"],
+            required: [true, "Please provide a valid status"]
+        },
+        stepCount: {
+            type: Number,
+            default: 0
+        },
+        stepDetail: [stepDetail],
+        points: [
+            {
+                group: Schema.Types.ObjectId,
+                point: Number
+            }
+        ],
+        startTime: Date,
+        endTime: Date
+    },
+    { timestamps: true }
+);
+const roundSettingSchema = new mongoose.Schema({
+    totalRounds: Number,
+    cheatPunishment: Number,
+    totalCheat: Number,
+    changePunishment: Number,
+    totalChange: Number
+});
+
+// const roundsDetailSchema = new mongoose.Schema(
+//     {
+//         groups: [
+//             {
+//                 type: Schema.Types.ObjectId
+//             }
+//         ],
+//         rounds: [roundSchema]
+//     },
+
+//     { timestamps: true }
+// );
+
+const gameSchema = new mongoose.Schema(
+    {
+        title: {
+            type: String,
+            required: [true, "you should provide a name"],
+            unique: [true, "this name is already in use"]
+        },
+        groups: [groupSchema],
+        roundsDetail: [roundSchema],
+        round: { type: Number, default: 0 },
+        repeatedWords: [Schema.Types.ObjectId],
+        setting: roundSettingSchema,
+        words: {
+            type: Schema.Types.ObjectId,
+            ref: "words"
+        }
+    },
+    { timestamps: true }
+);
+
+const Game = mongoose.model("Game", gameSchema);
 
 module.exports = Game;

@@ -1,0 +1,120 @@
+{
+    "Game": {
+        "gameTitle": "game1",
+        "slug": { "type": "String", "slug": "gameTitle" },
+        "Groups": [
+            {
+                "title": "nigma galaxy",
+                "players": [
+                    {
+                        "playerName": "Miracle",
+                        "birthday": "<date>",
+                        "sex": { "enum": ["", "", ""] },
+                        "score": 10,
+                        "createdAt": "<date>"
+                    },
+                    {
+                        "playerName": "kasra",
+                        "birthday": "<date>",
+                        "score": 10,
+                        "createdAt": "<date>"
+                    }
+                ],
+                "score": 10,
+                "createdAt": "<date>"
+            },
+            {
+                "groupName": "winter bear",
+                "players": [
+                    {
+                        "playerName": "ali",
+                        "birthday": "<date>",
+                        "score": 10,
+                        "createdAt": "<date>"
+                    },
+                    {
+                        "playerName": "aliakbar",
+                        "birthday": "<date>",
+                        "score": 10,
+                        "createdAt": "<date>"
+                    }
+                ],
+                "score": 10,
+                "createdAt": "<date>"
+            }
+        ],
+        "rounds_detail": {
+            "totalRounds": 5,
+            "groups": ["group.id1", "group.id2"],
+            "rounds": [
+                {
+                    "status": { "enum": ["running", "starting", "finished"] },
+                    "stepDetail": [
+                        {
+                            "group": "group.id1",
+                            "player": "player.id1",
+                            "word": "word.id1",
+                            "outcome": {
+                                "description": "cheat",
+                                "effect": -3,
+                                "attempt": 3
+                            },
+                            "score": 6,
+                            "createdAt": "",
+                            "endAt": ""
+                        },
+                        {
+                            "group": "group.id2",
+                            "player": "player.id2",
+                            "word": "word.id2",
+                            "outcome": {
+                                "description": "no penalty",
+                                "effect": 0,
+                                "attempt": null
+                            },
+                            "score": 6,
+                            "createdAt": "",
+                            "endAt": ""
+                        },
+                        {
+                            "group": "group.id3",
+                            "player": "player.id3",
+                            "word": "word.id3",
+                            "outcome": {
+                                "description": "change",
+                                "effect": -1,
+                                "attempt": 1
+                            },
+                            "score": 0,
+                            "createdAt": "",
+                            "endAt": ""
+                        }
+                    ],
+                    "points": [
+                        { "group": "group.id1", "point": 200 },
+                        { "group": "group.id2", "point": 200 }
+                    ],
+                    "startTime": "",
+                    "endTime": ""
+                }
+            ]
+        }
+    },
+
+    "Category": {
+        "title": "animal",
+        "slug": { "type": "String", "slug": "title" },
+        "words": [
+            {
+                "word": "cat",
+                "level": "2"
+            },
+            {
+                "word": "dog",
+                "level": "1"
+            }
+        ],
+        "createAt": "<date>",
+        "updatedAt": "<date"
+    }
+}

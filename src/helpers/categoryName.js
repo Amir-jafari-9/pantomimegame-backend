@@ -15,6 +15,6 @@ const categoryName = {
     TZ: "ضرب المثل",
     TET: "انتزاعی",
     TCC: "شهر و کشور",
-    TG: "طلائی"
+    TG: "طلایی"
 };
 module.exports = categoryName;
