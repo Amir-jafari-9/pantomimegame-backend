@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const groupSchema = new mongoose.Schema(
     {
-        title: {
+        group: {
             type: String,
             required: [true, "Please provide a title for the group"]
         },
@@ -71,12 +71,12 @@ const roundSettingSchema = new mongoose.Schema({
 
 const gameSchema = new mongoose.Schema(
     {
-        title: {
+        game: {
             type: String,
             required: [true, "you should provide a name"],
-            unique: [true, "this name is already in use"]
+            unique: [true, "the game name '{VALUE}' is already exist"]
         },
-        groups: { type: [groupSchema] },
+        groups: [groupSchema],
         roundsDetail: [roundSchema],
         round: { type: Number, default: 0 },
         repeatedWords: [Schema.Types.ObjectId],

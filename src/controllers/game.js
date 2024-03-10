@@ -11,7 +11,7 @@ const createGame = async (req, res) => {
         throw new CustomAPIError(error.toString().replace("Error: ", ""), 422);
 
     const newGame = await Game.create({
-        title: title,
+        game: title,
         groups: groups,
         setting: roundsSetting,
         roundsDetail: [
