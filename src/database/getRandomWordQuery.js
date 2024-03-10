@@ -1,4 +1,4 @@
-module.exports = getRandomWordQuery = (category, game, level) => {
+module.exports = getRandomWordQuery = (category, gameId, level) => {
     return [
         {
             $match: {
@@ -20,7 +20,7 @@ module.exports = getRandomWordQuery = (category, game, level) => {
         },
         {
             $match: {
-                "games.title": { $eq: game }
+                "games._id": { $eq: gameId }
             }
         },
         { $match: { level: { $eq: level } } },

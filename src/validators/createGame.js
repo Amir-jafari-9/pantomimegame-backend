@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { title, roundsSetting, gameId } = require("./dto/index.dto");
+const { title, roundsSetting } = require("./dto/index.dto");
 
 let group = Joi.object().keys({
     group: title

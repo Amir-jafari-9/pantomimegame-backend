@@ -8,11 +8,10 @@ const Game = require("../models/game");
 const WordModel = require("../models/word");
 const fetchWordSchema = require("../validators/fetchWord");
 
-
 const fetchRandomWord = async (req, res) => {
     // check result of validate
     let {
-        value: { category, level, gameId, status },
+        value: { category, level, game, status },
         error
     } = fetchWordSchema.validate(req.query);
     if (error)
@@ -21,26 +20,26 @@ const fetchRandomWord = async (req, res) => {
     // for golden question
     if (category !== "TG" && level !== "1" && level !== "2" && level !== "3")
         throw new CustomAPIError(
-            "for none 'TG' category please select between 1 , 2, 3",
+            "for none 'TG' category please select between 1 , 2, 3 ",
             404
         );
     if (category === "TG") level = "4";
 
-    const match = await Game.findById(gameId);
+    const match = await Game.findById(game);
     if (!match) {
         throw new CustomAPIError("game not found", 404);
     }
 
     // store some value for better access
-    const roundCount = match.round;
+    const roundCount = match.round; // 0
     const currentRoundDetail = match.roundsDetail[roundCount];
     const gameGroups = match.groups;
-    const stepCount = currentRoundDetail.stepCount;
+    const stepCount = currentRoundDetail.stepCount; // 0
     const currentStepDetail =
         currentRoundDetail.stepDetail[currentRoundDetail.stepCount];
 
     const [randomWord] = await WordModel.aggregate(
-        getRandomWordQuery(category, match.title, level)
+        getRandomWordQuery(category, match._id, level)
     );
     // console.log(randomWord);
     if (!randomWord) {
@@ -56,7 +55,7 @@ const fetchRandomWord = async (req, res) => {
             stepSetting: { category, level },
             group: gameGroups[currentRoundDetail.stepCount]._id,
             // player: "plyer._id",
-            words: [{ id: randomWord._id, title: randomWord.word }],
+            words: [{ wordId: randomWord._id, title: randomWord.word }],
             action: { change: 0, cheat: 0 },
             score: 0
         });
@@ -79,13 +78,11 @@ const fetchRandomWord = async (req, res) => {
 
     res.status(200).json({
         data: {
-
             name: categoryName[randomWord.category],
             category: randomWord.category,
             level: randomWord.level,
             words: match.roundsDetail[roundCount].stepDetail[stepCount].words,
             score: scoreList[randomWord.level]
-
         }
     });
 };
