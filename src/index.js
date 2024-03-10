@@ -3,16 +3,16 @@ require("express-async-errors");
 // extra security packages
 const helmet = require("helmet");
 const cors = require("cors");
-const rateLimiter = require("express-rate-limit");
 
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 
-const { importData } = require("./Utilities/importData");
+// const { importData } = require("./Utilities/importData");
 
 // routers
 const wordRoute = require("./routes/word");
+const gameRoute = require("./routes/game");
 
 // error handler
 const notFound = require("./middlewares/not-found");
@@ -28,6 +28,7 @@ app.use(helmet());
 
 // Routes
 app.use("/api/v1", wordRoute);
+app.use("/api/v1", gameRoute);
 
 app.get("/api/v1/version", (req, res) => {
     res.status(200).json({
@@ -46,7 +47,7 @@ const start = async () => {
             process.env.MONGO_URI,
             console.log("database connected ...")
         );
-        importData();
+        // importData();
         app.listen(port, console.log(`server is listening to port ${port}...`));
     } catch (error) {
         console.log(error);
