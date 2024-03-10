@@ -10,7 +10,7 @@ const fetchWordSchema = require("../validators/fetchWord");
 const fetchRandomWord = async (req, res) => {
     // check result of validate
     let {
-        value: { category, level, game, status },
+        value: { category, level, gameId, status },
         error
     } = fetchWordSchema.validate(req.query);
     if (error)
@@ -19,7 +19,7 @@ const fetchRandomWord = async (req, res) => {
     // for golden question
     if (category === "TG") level = "4";
 
-    const match = await Game.findOne({ title: game });
+    const match = await Game.findById(gameId);
     if (!match) {
         throw new CustomAPIError("game not found", 404);
     }

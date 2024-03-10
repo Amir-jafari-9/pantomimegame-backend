@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const createGame = require("../controllers/game");
-const storeRoundStep = require("../controllers/roundStep");
+const leaderBoard = require("../controllers/leaderboard");
 
 router.route("/games/new-game").post(createGame);
-router.route("/games/game").post(storeRoundStep);
+router.route("/games/game").post(leaderBoard);
 
 module.exports = router;

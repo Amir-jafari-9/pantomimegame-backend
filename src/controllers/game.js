@@ -13,26 +13,27 @@ const createGame = async (req, res) => {
     const newGame = await Game.create({
         title: title,
         groups: groups,
-        setting: roundsSetting
-    });
-
-    newGame.roundsDetail.push({
-        status: "starting",
-        points: [],
-        stepDetail: [],
-        startTime: Date.now()
+        setting: roundsSetting,
+        roundsDetail: [
+            {
+                status: "starting",
+                points: [],
+                stepDetail: [],
+                startTime: Date.now()
+            }
+        ]
     });
 
     const groupsId = newGame.groups.map((group) => group._id);
-    groupsId.map((id) =>
+    groupsId.map((groupId) =>
         newGame.roundsDetail[newGame.roundsDetail.length - 1].points.push({
-            group: id,
+            group: groupId,
             point: 0
         })
     );
 
     await newGame.save();
-    res.status(201).json({ game: newGame });
+    res.status(201).json({ gameId: newGame._id });
 };
 
 module.exports = createGame;

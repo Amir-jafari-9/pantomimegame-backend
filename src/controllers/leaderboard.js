@@ -4,7 +4,7 @@ const WordModel = require("../models/word");
 const storeRound = require("../validators/storeRound");
 const CustomAPIError = require("../errors/custom-error");
 
-const storeRoundStep = async (req, res) => {
+const leaderBoard = async (req, res) => {
     const {
         value: { game, cheatCount, restTime, totalScore, word },
         error
@@ -33,8 +33,19 @@ const storeRoundStep = async (req, res) => {
     currentRoundDetail.stepDetail[stepCount].restTimeScore = restTime;
     currentRoundDetail.stepDetail[stepCount].stepScore = totalScore;
 
-    if (currentRoundDetail.stepCount < match.groups.length)
-        currentRoundDetail.stepCount += 1;
+    if (match.round <= match.setting.totalRounds) {
+        if (currentRoundDetail.stepCount < match.groups.length) {
+            currentRoundDetail.stepCount++;
+        } else {
+            match.round++;
+        }
+    } else {
+        res.status(200).json({
+            data: {
+                gg: "wp"
+            }
+        });
+    }
 
     await match.save();
     res.status(200).json({
@@ -43,4 +54,4 @@ const storeRoundStep = async (req, res) => {
         }
     });
 };
-module.exports = storeRoundStep;
+module.exports = leaderBoard;

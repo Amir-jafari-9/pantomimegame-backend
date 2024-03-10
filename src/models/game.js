@@ -5,7 +5,7 @@ const groupSchema = new mongoose.Schema(
     {
         title: {
             type: String,
-            index: { unique: true }
+            required: [true, "Please provide a title for the group"]
         },
         players: [Schema.Types.ObjectId],
         score: {
@@ -69,19 +69,6 @@ const roundSettingSchema = new mongoose.Schema({
     totalChange: Number
 });
 
-// const roundsDetailSchema = new mongoose.Schema(
-//     {
-//         groups: [
-//             {
-//                 type: Schema.Types.ObjectId
-//             }
-//         ],
-//         rounds: [roundSchema]
-//     },
-
-//     { timestamps: true }
-// );
-
 const gameSchema = new mongoose.Schema(
     {
         title: {
@@ -89,7 +76,7 @@ const gameSchema = new mongoose.Schema(
             required: [true, "you should provide a name"],
             unique: [true, "this name is already in use"]
         },
-        groups: [groupSchema],
+        groups: { type: [groupSchema] },
         roundsDetail: [roundSchema],
         round: { type: Number, default: 0 },
         repeatedWords: [Schema.Types.ObjectId],
