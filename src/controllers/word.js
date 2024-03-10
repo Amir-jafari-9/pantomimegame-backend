@@ -3,9 +3,11 @@ const getRandomWordQuery = require("../database/getRandomWordQuery");
 const CustomAPIError = require("../errors/custom-error");
 const categoryName = require("../helpers/categoryName");
 const scoreList = require("../helpers/scorelist");
+
 const Game = require("../models/game");
 const WordModel = require("../models/word");
 const fetchWordSchema = require("../validators/fetchWord");
+
 
 const fetchRandomWord = async (req, res) => {
     // check result of validate
@@ -17,6 +19,11 @@ const fetchRandomWord = async (req, res) => {
         throw new CustomAPIError(error.toString().replace("Error: ", ""), 422);
 
     // for golden question
+    if (category !== "TG" && level !== "1" && level !== "2" && level !== "3")
+        throw new CustomAPIError(
+            "for none 'TG' category please select between 1 , 2, 3",
+            404
+        );
     if (category === "TG") level = "4";
 
     const match = await Game.findById(gameId);
@@ -72,35 +79,15 @@ const fetchRandomWord = async (req, res) => {
 
     res.status(200).json({
         data: {
+
             name: categoryName[randomWord.category],
             category: randomWord.category,
             level: randomWord.level,
             words: match.roundsDetail[roundCount].stepDetail[stepCount].words,
             score: scoreList[randomWord.level]
+
         }
     });
 };
 
 module.exports = { fetchRandomWord };
-
-// get random data from database
-// const [categoryData] = await CategoryModel.aggregate(
-//     getRandomWordQuery(category, game, level)
-// );
-// if (!categoryData) {
-//     throw new CustomAPIError("No data found", 404);
-// }
-
-// const wordData = categoryData.words;
-
-// // add random word to Repeated in database
-// const gameData = await Game.findOneAndUpdate(
-//     { name: game, "repeatedWords.title": category },
-//     {
-//         $push: { "repeatedWords.$.words": wordData._id }
-//     },
-//     { new: true }
-// );
-
-// // helper function to clear Repeated if all word use
-// clearRepeated(gameData, level, category);
