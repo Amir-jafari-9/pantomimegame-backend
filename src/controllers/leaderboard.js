@@ -7,7 +7,14 @@ const fetchGroups = require("../validators/fetchGroups");
 
 const leaderBoard = async (req, res) => {
     const {
-        value: { gameId, totalCheat, restTimePoints, totalChange, wordId },
+        value: {
+            gameId,
+            totalCheat,
+            restTimePoints,
+            totalChange,
+            wordId,
+            guess
+        },
         error
     } = storeRound.validate(req.body);
     if (error)
@@ -32,11 +39,16 @@ const leaderBoard = async (req, res) => {
             currentStepDetail.playedWord = wordId;
             currentStepDetail.restTimeScore = restTimePoints;
             // calculate all score
-            const scoreResult =
-                currentStepDetail.stepSetting.wordPoints +
-                currentStepDetail.restTimeScore +
-                currentStepDetail.action.cheat * -1 +
-                currentStepDetail.action.change * -1;
+            let scoreResult = 0;
+            if (guess) {
+                scoreResult =
+                    currentStepDetail.stepSetting.wordPoints +
+                    currentStepDetail.restTimeScore +
+                    currentStepDetail.action.cheat * -1 +
+                    currentStepDetail.action.change * -1;
+            } else {
+                scoreResult = 0;
+            }
             currentStepDetail.stepScore = scoreResult;
 
             currentRoundDetail.points[match.stepCount].point = scoreResult;
