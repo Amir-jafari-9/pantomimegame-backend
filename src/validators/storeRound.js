@@ -18,7 +18,12 @@ const storeRound = Joi.object({
         .error(new Error("gameId can not be empty"))
         .required()
         .error(new Error("please provide an gameId"))
-        .trim()
+        .trim(),
+    guess: Joi.boolean()
+        .empty()
+        .error(new Error("guess can not be empty"))
+        .required()
+        .error(new Error("please provide an guess"))
 });
 
 module.exports = storeRound;
