@@ -18,7 +18,8 @@ const groupSchema = new mongoose.Schema(
 );
 const stepSettingSchema = new mongoose.Schema({
     category: String,
-    level: String
+    level: String,
+    wordPoints: Number
 });
 const actionSchema = new mongoose.Schema({
     cheat: Number,
@@ -32,9 +33,9 @@ const stepDetail = new mongoose.Schema(
         player: Schema.Types.ObjectId,
         words: [{ wordId: Schema.Types.ObjectId, title: String }],
         playedWord: Schema.Types.ObjectId,
-        action: actionSchema,
-        stepScore: Number,
-        restTimeScore: Number
+        action: { type: actionSchema, default: { cheat: 0, change: 0 } },
+        stepScore: { type: Number, default: 0 },
+        restTimeScore: { type: Number, default: 0 }
     },
     { timestamps: true }
 );
@@ -45,10 +46,7 @@ const roundSchema = new mongoose.Schema(
             enum: ["running", "starting", "finished"],
             required: [true, "Please provide a valid status"]
         },
-        stepCount: {
-            type: Number,
-            default: 0
-        },
+
         stepDetail: [stepDetail],
         points: [
             {
@@ -79,6 +77,10 @@ const gameSchema = new mongoose.Schema(
         groups: [groupSchema],
         roundsDetail: [roundSchema],
         round: { type: Number, default: 0 },
+        stepCount: {
+            type: Number,
+            default: 0
+        },
         repeatedWords: [Schema.Types.ObjectId],
         setting: roundSettingSchema,
         words: {

@@ -9,9 +9,9 @@ const storeRound = Joi.object({
         .required()
         .error(new Error("please provide an gameId"))
         .trim(),
-    totalCheat: Joi.number().integer().positive().max(3),
-    restTimePoints: Joi.number().integer().positive(),
-    totalScore: Joi.number().integer().positive(),
+    totalCheat: Joi.number().integer().greater(-1).max(3),
+    restTimePoints: Joi.number().integer().greater(-1),
+    totalChange: Joi.number().integer().greater(-1),
     wordId: Joi.string()
         .error(new Error("gameId should be an string"))
         .empty()
