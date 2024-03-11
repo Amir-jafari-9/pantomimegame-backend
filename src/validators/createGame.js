@@ -2,7 +2,7 @@ const Joi = require("joi");
 const { title, roundsSetting } = require("./dto/index.dto");
 
 let group = Joi.object().keys({
-    title
+    group: title
 });
 
 const createGameValidation = Joi.object({
