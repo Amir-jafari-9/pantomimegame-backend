@@ -30,12 +30,16 @@ const fetchRandomWord = async (req, res) => {
         throw new CustomAPIError("game not found", 404);
     }
 
+    if (match.status === "finished")
+        throw new CustomAPIError("this game is already finished", 409);
+
     // store some value for better access
     const roundCount = match.round; // 0
     const currentRoundDetail = match.roundsDetail[roundCount];
     const gameGroups = match.groups;
     const stepCount = match.stepCount; // 0
     const currentStepDetail = currentRoundDetail.stepDetail[stepCount];
+    if (match.status === "starting") match.status = "running";
 
     const [randomWord] = await WordModel.aggregate(
         getRandomWordQuery(category, match._id, level)
@@ -77,7 +81,6 @@ const fetchRandomWord = async (req, res) => {
     }
     await match.save();
     const words = match.roundsDetail[roundCount].stepDetail[stepCount].words;
-    console.log(words);
 
     res.status(200).json({
         data: {

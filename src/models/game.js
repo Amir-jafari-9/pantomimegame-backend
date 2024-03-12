@@ -83,7 +83,7 @@ const gameSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ["running", "finished"],
+            enum: ["starting", "running", "finished"],
             required: [true, "Please provide a valid status"]
         },
         repeatedWords: [Schema.Types.ObjectId],
