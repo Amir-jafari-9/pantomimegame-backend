@@ -42,9 +42,9 @@ const leaderBoard = async (req, res) => {
             if (guess) {
                 scoreResult =
                     currentStepDetail.stepSetting.wordPoints +
-                    currentStepDetail.restTimeScore +
-                    currentStepDetail.action.cheat * -1 +
-                    currentStepDetail.action.change * -1;
+                    currentStepDetail.restTimeScore -
+                    currentStepDetail.action.cheat -
+                    currentStepDetail.action.change;
             } else {
                 scoreResult = 0;
             }
@@ -101,6 +101,7 @@ const getGroups = async (req, res) => {
     const game = await Game.findById(gameId);
     res.status(200).json({
         data: {
+            status: game.status,
             allGroup: game.groups,
             currentRound: game.round + 1,
             totalRound: game.setting.totalRounds,
