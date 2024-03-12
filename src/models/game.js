@@ -81,6 +81,11 @@ const gameSchema = new mongoose.Schema(
             type: Number,
             default: 0
         },
+        status: {
+            type: String,
+            enum: ["running", "finished"],
+            required: [true, "Please provide a valid status"]
+        },
         repeatedWords: [Schema.Types.ObjectId],
         setting: roundSettingSchema,
         words: {
