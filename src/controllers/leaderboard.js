@@ -24,14 +24,13 @@ const leaderBoard = async (req, res) => {
     if (!match) {
         throw new CustomAPIError("game not found", 404);
     }
-    const roundCount = match.round; // 0
-
+    const roundCount = match.round;
     const currentRoundDetail = match.roundsDetail[roundCount];
-
-    const stepCount = match.stepCount; //0
+    const stepCount = match.stepCount;
     const currentStepDetail = currentRoundDetail.stepDetail[stepCount];
 
-    if (roundCount <= match.setting.totalRounds - 1) {
+    if (match.round + 1 <= match.setting.totalRounds) {
+        console.log(roundCount, match.setting.totalRounds);
         if (match.stepCount <= match.groups.length) {
             // store each data
             currentStepDetail.action.cheat = totalCheat;
@@ -56,38 +55,40 @@ const leaderBoard = async (req, res) => {
             match.groups[match.stepCount].score += scoreResult;
             match.stepCount++;
             if (match.stepCount >= match.groups.length) {
-                if (match.round >= match.setting.totalRounds) {
-                }
-                match.round++;
                 match.stepCount = 0;
                 currentRoundDetail.status = "finished";
-                match.roundsDetail.push({
-                    status: "starting",
-                    points: [],
-                    stepDetail: [],
-                    startTime: Date.now()
-                });
-                const groupsId = match.groups.map((group) => group._id);
-                groupsId.map((groupId) =>
-                    match.roundsDetail[
-                        match.roundsDetail.length - 1
-                    ].points.push({
-                        group: groupId,
-                        point: 0
-                    })
-                );
+
+                match.round++;
+                if (match.round + 1 <= match.setting.totalRounds) {
+                    match.roundsDetail.push({
+                        status: "starting",
+                        points: [],
+                        stepDetail: [],
+                        startTime: Date.now()
+                    });
+                    const groupsId = match.groups.map((group) => group._id);
+                    groupsId.map((groupId) =>
+                        match.roundsDetail[
+                            match.roundsDetail.length - 1
+                        ].points.push({
+                            group: groupId,
+                            point: 0
+                        })
+                    );
+                } else {
+                    match.status = "finished";
+                }
             }
         }
-        res.status(200).json({ match });
-    } else {
-        res.status(200).json({
-            data: {
-                message: "game finish"
-            }
-        });
     }
-
     await match.save();
+
+    res.status(200).json({
+        data: {
+            status: match.status,
+            allGroups: match.groups
+        }
+    });
 };
 
 const getGroups = async (req, res) => {

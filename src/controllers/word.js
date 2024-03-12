@@ -77,6 +77,7 @@ const fetchRandomWord = async (req, res) => {
     }
     await match.save();
     const words = match.roundsDetail[roundCount].stepDetail[stepCount].words;
+    console.log(words);
 
     res.status(200).json({
         data: {
