@@ -29,58 +29,60 @@ const leaderBoard = async (req, res) => {
     const stepCount = match.stepCount;
     const currentStepDetail = currentRoundDetail.stepDetail[stepCount];
 
-    if (match.round + 1 <= match.setting.totalRounds) {
-        console.log(roundCount, match.setting.totalRounds);
-        if (match.stepCount <= match.groups.length) {
-            // store each data
-            currentStepDetail.action.cheat = totalCheat;
-            currentStepDetail.action.change = totalChange;
-            currentStepDetail.playedWord = wordId;
-            currentStepDetail.restTimeScore = restTimePoints;
-            // calculate all score
-            let scoreResult = 0;
-            if (guess) {
-                scoreResult =
-                    currentStepDetail.stepSetting.wordPoints +
-                    currentStepDetail.restTimeScore -
-                    currentStepDetail.action.cheat -
-                    currentStepDetail.action.change;
+    if (match.stepCount <= match.groups.length) {
+        // store each data
+        currentStepDetail.action.cheat = totalCheat;
+        currentStepDetail.action.change = totalChange;
+        currentStepDetail.playedWord = wordId;
+        currentStepDetail.restTimeScore = restTimePoints;
+        // calculate all score
+        let scoreResult = 0;
+        if (guess) {
+            scoreResult =
+                currentStepDetail.stepSetting.wordPoints +
+                currentStepDetail.restTimeScore -
+                currentStepDetail.action.cheat -
+                currentStepDetail.action.change;
+        } else {
+            scoreResult = 0;
+        }
+
+        // store Results
+        currentStepDetail.stepScore = scoreResult;
+        currentRoundDetail.points[match.stepCount].point = scoreResult;
+        match.groups[match.stepCount].score += scoreResult;
+
+        match.stepCount++;
+
+        // all steps done and round finished
+        if (match.stepCount >= match.groups.length) {
+            match.stepCount = 0;
+            currentRoundDetail.status = "finished";
+            match.round++;
+
+            // if rounds not finished
+            if (match.round + 1 <= match.setting.totalRounds) {
+                match.roundsDetail.push({
+                    status: "starting",
+                    points: [],
+                    stepDetail: [],
+                    startTime: Date.now()
+                });
+                const groupsId = match.groups.map((group) => group._id);
+                groupsId.map((groupId) =>
+                    match.roundsDetail[
+                        match.roundsDetail.length - 1
+                    ].points.push({
+                        group: groupId,
+                        point: 0
+                    })
+                );
             } else {
-                scoreResult = 0;
-            }
-            currentStepDetail.stepScore = scoreResult;
-
-            currentRoundDetail.points[match.stepCount].point = scoreResult;
-
-            match.groups[match.stepCount].score += scoreResult;
-            match.stepCount++;
-            if (match.stepCount >= match.groups.length) {
-                match.stepCount = 0;
-                currentRoundDetail.status = "finished";
-
-                match.round++;
-                if (match.round + 1 <= match.setting.totalRounds) {
-                    match.roundsDetail.push({
-                        status: "starting",
-                        points: [],
-                        stepDetail: [],
-                        startTime: Date.now()
-                    });
-                    const groupsId = match.groups.map((group) => group._id);
-                    groupsId.map((groupId) =>
-                        match.roundsDetail[
-                            match.roundsDetail.length - 1
-                        ].points.push({
-                            group: groupId,
-                            point: 0
-                        })
-                    );
-                } else {
-                    match.status = "finished";
-                }
+                match.status = "finished";
             }
         }
     }
+
     await match.save();
 
     res.status(200).json({

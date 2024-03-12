@@ -12,7 +12,7 @@ const createGame = async (req, res) => {
 
     const newGame = await Game.create({
         game: title,
-        status: "running",
+        status: "starting",
         groups: groups,
         setting: roundsSetting,
         roundsDetail: [
