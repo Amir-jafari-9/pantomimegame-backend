@@ -13,6 +13,7 @@ const app = express();
 // routers
 const wordRoute = require("./routes/word");
 const gameRoute = require("./routes/game");
+const helperRoute = require("./routes/helper");
 
 // error handler
 const notFound = require("./middlewares/not-found");
@@ -29,6 +30,7 @@ app.use(helmet());
 // Routes
 app.use("/api/v1", wordRoute);
 app.use("/api/v1", gameRoute);
+app.use("/api/v1", helperRoute);
 
 app.get("/api/v1/version", (req, res) => {
     res.status(200).json({

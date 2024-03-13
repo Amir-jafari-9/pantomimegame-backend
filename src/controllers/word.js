@@ -4,7 +4,7 @@ const CustomAPIError = require("../errors/custom-error");
 const categoryName = require("../helpers/categoryName");
 const scoreList = require("../helpers/scorelist");
 
-const Game = require("../models/game");
+const GameModel = require("../models/game");
 const WordModel = require("../models/word");
 const fetchWordSchema = require("../validators/fetchWord");
 
@@ -18,14 +18,15 @@ const fetchRandomWord = async (req, res) => {
         throw new CustomAPIError(error.toString().replace("Error: ", ""), 422);
 
     // for golden question
-    if (category !== "TG" && level !== "1" && level !== "2" && level !== "3")
+    if (category !== "TG" && !["1", "2", "3"].includes(level)) {
         throw new CustomAPIError(
-            "for none 'TG' category please select between 1 , 2, 3 ",
+            "For categories other than 'TG', please select level between 1, 2, 3",
             404
         );
+    }
     if (category === "TG") level = "4";
 
-    const match = await Game.findById(game);
+    const match = await GameModel.findById(game);
     if (!match) {
         throw new CustomAPIError("game not found", 404);
     }
