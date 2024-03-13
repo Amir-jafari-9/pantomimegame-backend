@@ -50,10 +50,12 @@ const fetchRandomWord = async (req, res) => {
         throw new CustomAPIError("No data found", 404);
     }
 
-    match.repeatedWords.push(randomWord._id);
-
     if (status === "new") {
+        if (match.pass === false) {
+            throw new CustomAPIError("please submit your last step", 400);
+        }
         currentRoundDetail.status = "running";
+        match.repeatedWords.push(randomWord._id);
         currentRoundDetail.stepDetail.push({
             stepSetting: {
                 category: randomWord.category,
@@ -65,11 +67,13 @@ const fetchRandomWord = async (req, res) => {
             // player: "plyer._id",
             words: [{ wordId: randomWord._id, title: randomWord.word }]
         });
+        match.pass = false;
     }
     if (status === "change") {
         if (!currentStepDetail)
             throw new CustomAPIError("you are not in this step", 404);
         if (currentStepDetail.action.change <= 2) {
+            match.repeatedWords.push(randomWord._id);
             match.roundsDetail[roundCount].stepDetail[stepCount].words.push({
                 wordId: randomWord._id,
                 title: randomWord.word

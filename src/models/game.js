@@ -89,6 +89,7 @@ const gameSchema = new mongoose.Schema(
         },
         repeatedWords: [Schema.Types.ObjectId],
         setting: roundSettingSchema,
+        pass: { type: Boolean, default: true },
         words: {
             type: Schema.Types.ObjectId,
             ref: "words"
