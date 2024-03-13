@@ -1,6 +1,4 @@
-const mongoose = require("mongoose");
 const GameModel = require("../models/game");
-const WordModel = require("../models/word");
 const storeRoundValidator = require("../validators/storeRound");
 const CustomAPIError = require("../errors/custom-error");
 const fetchGroupsValidator = require("../validators/fetchGroups");
@@ -69,7 +67,6 @@ const updateLeaderBoard = async (req, res) => {
             }
         }
     }
-
     await match.save();
 
     res.status(200).json({
@@ -99,5 +96,4 @@ const getGroups = async (req, res) => {
         }
     });
 };
-
 module.exports = { updateLeaderBoard, getGroups };

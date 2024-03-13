@@ -1,5 +1,4 @@
 const Joi = require("joi");
-const { mongooseId } = require("./dto/index.dto");
 
 const storeRound = Joi.object({
     gameId: Joi.string()
