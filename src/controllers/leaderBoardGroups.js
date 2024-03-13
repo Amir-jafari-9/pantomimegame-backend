@@ -38,6 +38,8 @@ const updateLeaderBoard = async (req, res) => {
 
         match.stepCount++;
 
+        match.pass = true;
+
         // Check if round finished
         if (match.stepCount >= match.groups.length) {
             match.stepCount = 0;
