@@ -55,8 +55,9 @@ const fetchRandomWord = async (req, res) => {
         currentRoundDetail.status = "running";
         currentRoundDetail.stepDetail.push({
             stepSetting: {
-                category,
-                level,
+                category: randomWord.category,
+                level: randomWord.level,
+                word: randomWord.word,
                 wordPoints: scoreList[randomWord.level]
             },
             group: gameGroups[stepCount]._id,

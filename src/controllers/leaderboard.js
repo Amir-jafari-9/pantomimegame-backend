@@ -50,6 +50,8 @@ const leaderBoard = async (req, res) => {
         currentRoundDetail.points[match.stepCount].point = scoreResult;
         match.groups[match.stepCount].score += scoreResult;
 
+        console.log(currentStepDetail.stepSetting);
+
         match.stepCount++;
 
         // all steps done and round finished
