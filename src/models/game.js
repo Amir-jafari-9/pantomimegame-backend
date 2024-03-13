@@ -19,6 +19,7 @@ const groupSchema = new mongoose.Schema(
 const stepSettingSchema = new mongoose.Schema({
     category: String,
     level: String,
+    word: String,
     wordPoints: Number
 });
 const actionSchema = new mongoose.Schema({
