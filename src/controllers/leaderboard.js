@@ -4,6 +4,7 @@ const WordModel = require("../models/word");
 const storeRound = require("../validators/storeRound");
 const CustomAPIError = require("../errors/custom-error");
 const fetchGroups = require("../validators/fetchGroups");
+const calculateScore = require("../helpers/calculateScore");
 
 const leaderBoard = async (req, res) => {
     const {
@@ -36,17 +37,14 @@ const leaderBoard = async (req, res) => {
         currentStepDetail.playedWord = wordId;
         currentStepDetail.restTimeScore = restTimePoints;
         // calculate all score
-        let scoreResult = 0;
-        if (guess) {
-            scoreResult =
-                currentStepDetail.stepSetting.wordPoints +
-                currentStepDetail.restTimeScore -
-                currentStepDetail.action.cheat -
-                currentStepDetail.action.change;
-        } else {
-            scoreResult = 0;
-        }
-
+        const scoreResult = calculateScore(
+            currentStepDetail.stepSetting.wordPoints,
+            restTimePoints,
+            totalCheat,
+            totalChange,
+            guess
+        );
+        console.log(scoreResult);
         // store Results
         currentStepDetail.stepScore = scoreResult;
         currentRoundDetail.points[match.stepCount].point = scoreResult;
