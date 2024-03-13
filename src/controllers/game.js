@@ -1,5 +1,6 @@
 const CustomAPIError = require("../errors/custom-error");
-const Game = require("../models/game");
+const GameModel = require("../models/game");
+
 const createGameValidation = require("../validators/createGame");
 
 const createGame = async (req, res) => {
@@ -10,7 +11,7 @@ const createGame = async (req, res) => {
     if (error)
         throw new CustomAPIError(error.toString().replace("Error: ", ""), 422);
 
-    const newGame = await Game.create({
+    const newGame = await GameModel.create({
         game: title,
         status: "starting",
         groups: groups,
